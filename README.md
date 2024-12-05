@@ -30,10 +30,17 @@
     - AWS EC2 환경에 배포
     - 코드 리뷰를 통해 코드 리팩토링 후 재배포
 
+## 구현 시나리오
+
+1. 기능 구현
+   - 회원 가입 : `정보 저장을 위해 MySQL 사용`
+2. 배포
+   - `Github Action 사용`
+
 # API 명세
 
-| 기능    | Method | URL       | request | response |
-|-------|--------|-----------|---------|----------|
-| 회원 가입 | `POST` | `/signup` |         |          | 
-| 로그인   | `POST` | `/sign`   |         |          |
+| 기능    | Method | URL       | request                                                               | response                                                                                                    |
+|-------|--------|-----------|-----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| 회원 가입 | `POST` | `/signup` | {	"username": "JIN HO",	"password": "12341234",	"nickname": "Mentos"} | {	"username": "JIN HO",	"nickname": "Mentos",	"authorities": [			{					"authorityName": "ROLE_USER"			}	]	} |
+| 로그인   | `POST` | `/sign`   | {	"username": "JIN HO",	"password": "12341234"}                       | {	"token": "eKDIkdfjoakIdkfjpekdkcjdkoIOdjOKJDFOlLDKFJKL",}                                                 |
 
