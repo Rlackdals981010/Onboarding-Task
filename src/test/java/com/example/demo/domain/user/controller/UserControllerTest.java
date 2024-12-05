@@ -44,6 +44,9 @@ public class UserControllerTest {
     private UserRequest.Signup signUpRequest;
     private UserResponse.Signup signUpResponse;
 
+    private UserRequest.Sign signRequest;
+    private UserResponse.Sign signResponse;
+
     @BeforeEach
     void setUp() {
         signUpRequest = new UserRequest.Signup("testUser", "password123", "testNickname");
@@ -52,6 +55,9 @@ public class UserControllerTest {
                 "testNickname",
                 List.of(new UserResponse.AuthorityResponse(UserRole.ROLE_USER.getAuthorityName()))
         );
+
+        signRequest = new UserRequest.Sign("testUser", "password123");
+        signResponse = new UserResponse.Sign("testJwtToken");
     }
 
     @Test
@@ -70,6 +76,24 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.nickname").value(signUpResponse.nickname()))
                 .andExpect(jsonPath("$.authorities[0].authorityName").value("ROLE_USER"));
     }
+
+    @Test
+    void 로그인_성공() throws Exception {
+        // given
+        when(userService.sign(signRequest.username(), signRequest.password()))
+                .thenReturn(signResponse);
+
+        // when & then
+        mockMvc.perform(post("/sign")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.token").value(signResponse.token()));
+    }
+
+
+
 
 
 }
