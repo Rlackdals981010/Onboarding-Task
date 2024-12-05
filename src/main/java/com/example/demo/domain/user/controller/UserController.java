@@ -4,6 +4,7 @@ package com.example.demo.domain.user.controller;
 import com.example.demo.domain.user.dto.UserRequest;
 import com.example.demo.domain.user.dto.UserResponse;
 import com.example.demo.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
