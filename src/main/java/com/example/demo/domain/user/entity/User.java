@@ -14,19 +14,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
-    private String password;
     @Column(unique = true)
-    private String nickName;
+    private String username;
+    private String password;
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
 
-    public User(String userName, String password , String nickName ){
-        this.userName=userName;
-        this.password=password;
-        this.nickName=nickName;
+    public User(String username, String password , String nickname, UserRole userRole ){
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.userRole = userRole;
     }
 
 }

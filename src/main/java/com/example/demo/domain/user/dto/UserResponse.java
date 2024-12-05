@@ -10,8 +10,12 @@ public sealed interface UserResponse permits UserResponse.Signup, UserResponse.S
     record Signup(
             String username,
             String nickname,
-            List<UserRole> authorities
+            List<AuthorityResponse> authorities
     ) implements UserResponse {}
+
+    record AuthorityResponse(
+            String authorityName
+    ) {}
 
     // 회원 정보 수정 시 응답
     record Sign(

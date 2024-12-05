@@ -1,7 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset : UTF-8
+      enabled: true
+      force: true
+      
 spring:
   application:
     name : demo
-
   config:
     import: optional:file:.env[.properties]
   datasource:
@@ -18,3 +26,6 @@ spring:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
