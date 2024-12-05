@@ -1,15 +1,11 @@
 package com.example.demo.domain.user.controller;
 
-import com.example.demo.domain.user.controller.UserController;
-import com.example.demo.domain.user.dto.UserRequest;
-import com.example.demo.domain.user.dto.UserResponse;
 import com.example.demo.domain.user.enums.UserRole;
 import com.example.demo.domain.user.service.UserService;
 import com.example.demo.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

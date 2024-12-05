@@ -1,13 +1,10 @@
 package com.example.demo.domain.user.service;
 
-import com.example.demo.domain.user.dto.UserRequest;
-import com.example.demo.domain.user.dto.UserResponse;
 import com.example.demo.domain.user.entity.User;
 import com.example.demo.domain.user.enums.UserRole;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.security.dto.JwtUtilRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;

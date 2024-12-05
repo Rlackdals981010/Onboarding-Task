@@ -1,10 +1,11 @@
 package com.example.demo.domain.user.controller;
 
 
-import com.example.demo.domain.user.dto.UserRequest;
-import com.example.demo.domain.user.dto.UserResponse;
+import com.example.demo.domain.user.dto.request.SignRequestDto;
+import com.example.demo.domain.user.dto.request.SignUpRequestDto;
+import com.example.demo.domain.user.dto.response.SignResponseDto;
+import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,13 +18,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public UserResponse.Signup signup(@RequestBody UserRequest.Signup signUpDto) throws Exception {
-        return userService.signUp(signUpDto.username(), signUpDto.password(), signUpDto.nickname());
+    public SignUpResponseDto signup(@RequestBody SignUpRequestDto signUpDto) throws Exception {
+        return userService.signUp(signUpDto.getUsername(), signUpDto.getPassword(), signUpDto.getNickname());
     }
 
     @PostMapping("/sign")
-    public UserResponse.Sign sign(@RequestBody UserRequest.Sign signDto) throws Exception {
-        return userService.sign(signDto.username(), signDto.password());
+    public SignResponseDto sign(@RequestBody SignRequestDto signDto) throws Exception {
+        return userService.sign(signDto.getUsername(), signDto.getPassword());
     }
 
 

@@ -1,7 +1,8 @@
 package com.example.demo.domain.user.service;
 
 
-import com.example.demo.domain.user.dto.UserResponse;
+import com.example.demo.domain.user.dto.response.SignResponseDto;
+import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.entity.User;
 import com.example.demo.domain.user.enums.UserRole;
 import com.example.demo.domain.user.repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserService  {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public UserResponse.Signup signUp(String username, String password, String nickname) throws Exception {
+    public SignUpResponseDto signUp(String username, String password, String nickname) throws Exception {
 
         if (userRepository.findByUsername(username).isPresent()) {
             throw new Exception("이미 가입된 유저입니다.");
@@ -35,11 +36,11 @@ public class UserService  {
         User newUser = userRepository.save(new User(username, encodedPassword, nickname, UserRole.ROLE_USER));
 
         // UserRole -> AuthorityResponse로 매핑
-        List<UserResponse.AuthorityResponse> authorityResponses = List.of(
-                new UserResponse.AuthorityResponse(newUser.getUserRole().getAuthorityName())
+        List<SignUpResponseDto.AuthorityResponse> authorityResponses = List.of(
+                new SignUpResponseDto.AuthorityResponse(newUser.getUserRole().getAuthorityName())
         );
 
-        return new UserResponse.Signup(
+        return new SignUpResponseDto(
                 newUser.getUsername(),
                 newUser.getNickname(),
                 authorityResponses
@@ -47,7 +48,7 @@ public class UserService  {
     }
 
 
-    public UserResponse.Sign sign(String username, String password) {
+    public SignResponseDto sign(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -61,6 +62,6 @@ public class UserService  {
 
         String token = jwtUtil.createToken(createToken);
 
-        return new UserResponse.Sign(token);
+        return new SignResponseDto(token);
     }
 }
