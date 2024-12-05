@@ -21,6 +21,11 @@ public class UserController {
         return userService.signUp(signUpDto.username(), signUpDto.password(), signUpDto.nickname());
     }
 
+    @PostMapping("/sign")
+    public UserResponse.Sign sign(@RequestBody UserRequest.Sign signDto) throws Exception {
+        return userService.sign(signDto.username(), signDto.password());
+    }
+
 
 
 }

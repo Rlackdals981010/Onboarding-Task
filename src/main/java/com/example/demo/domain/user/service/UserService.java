@@ -6,6 +6,7 @@ import com.example.demo.domain.user.entity.User;
 import com.example.demo.domain.user.enums.UserRole;
 import com.example.demo.domain.user.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
+import com.example.demo.security.dto.JwtUtilRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ public class UserService  {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public UserResponse.Signup signUp(String username, String password, String nickname) throws Exception {
@@ -45,4 +47,20 @@ public class UserService  {
     }
 
 
+    public UserResponse.Sign sign(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+        }
+
+        JwtUtilRequest.CreateToken createToken = new JwtUtilRequest.CreateToken(
+            user.getUsername(), user.getNickname()
+        );
+
+        String token = jwtUtil.createToken(createToken);
+
+        return new UserResponse.Sign(token);
+    }
 }
