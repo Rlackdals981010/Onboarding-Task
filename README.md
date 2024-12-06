@@ -65,8 +65,21 @@
 - [x] Spring Security 설정 및 Filter 처리
 - [x] JWT 및 관련 알고리즘 이해
 - [x] 회원가입 기능 구현 및 테스트
+      
+![회원가입](https://github.com/user-attachments/assets/e36cea00-ea9e-4982-adc3-a762a3c84b33)
+
 - [x] 로그인 기능 구현 및 테스트
+      
+![로그인](https://github.com/user-attachments/assets/27001714-2c93-4078-8251-8fce569e7e58)
+
 - [x] Swagger UI 설정 및 API 검증
-- [] PR 작성 및 제출
-- [] 코드 리뷰를 통한 개선
-- [] AWS EC2 환경에 배포
+      
+![스웨거 회원가입](https://github.com/user-attachments/assets/813ff74e-52a0-4255-ae9b-34f28cc69571)
+![스웨거 로그인](https://github.com/user-attachments/assets/baff7bf2-1625-411f-b008-e3db93449cef)     
+
+- [x] PR 작성 및 제출
+- [x] 코드 리뷰를 통한 개선
+- [x] AWS EC2 환경에 배포 [헬스체크링크](http://3.39.236.40:8080/health)
+      
+![스크린샷 2024-12-06 오후 6 37 09](https://github.com/user-attachments/assets/5149bf02-dd01-434c-b23c-caf52e986ce1)
+
