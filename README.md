@@ -61,7 +61,7 @@
 | 로그인   | `POST` | `/sign`   | {	"username": "JIN HO",	"password": "12341234"}                       | {	"token": "eKDIkdfjoakIdkfjpekdkcjdkoIOdjOKJDFOlLDKFJKL",}                                                 |
 
 # 작업 진행 상황
-- [] JUnit을 이용한 JWT 테스트 코드 작성
+- [x] JUnit을 이용한 JWT 테스트 코드 작성
 - [x] Spring Security 설정 및 Filter 처리
 - [x] JWT 및 관련 알고리즘 이해
 - [x] 회원가입 기능 구현 및 테스트
