@@ -30,9 +30,10 @@ jobs:
 
     - uses: mirromutth/mysql-action@v1.1
       with:
-          host port: 3306
+          host port: 3307
           container port: 3306
           mysql database: 'testdb'
+          mysql root password: ${{ secrets.DB_PASSWORD }}
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
