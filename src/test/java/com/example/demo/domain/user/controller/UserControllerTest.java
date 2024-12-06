@@ -1,5 +1,9 @@
 package com.example.demo.domain.user.controller;
 
+import com.example.demo.domain.user.dto.request.SignRequestDto;
+import com.example.demo.domain.user.dto.request.SignUpRequestDto;
+import com.example.demo.domain.user.dto.response.SignResponseDto;
+import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.enums.UserRole;
 import com.example.demo.domain.user.service.UserService;
 import com.example.demo.security.JwtUtil;
@@ -11,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -37,23 +42,30 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private UserRequest.Signup signUpRequest;
-    private UserResponse.Signup signUpResponse;
+    private SignUpRequestDto signUpRequest;
+    private SignUpResponseDto signUpResponse;
 
-    private UserRequest.Sign signRequest;
-    private UserResponse.Sign signResponse;
+    private SignRequestDto signRequest;
+    private SignResponseDto signResponse;
 
     @BeforeEach
     void setUp() {
-        signUpRequest = new UserRequest.Signup("testUser", "password123", "testNickname");
-        signUpResponse = new UserResponse.Signup(
+        signUpRequest = new SignUpRequestDto();
+        ReflectionTestUtils.setField(signUpRequest, "username", "testUser");
+        ReflectionTestUtils.setField(signUpRequest, "password", "password123");
+        ReflectionTestUtils.setField(signUpRequest, "nickname", "testNickname");
+
+        signUpResponse = new SignUpResponseDto(
                 "testUser",
                 "testNickname",
-                List.of(new UserResponse.AuthorityResponse(UserRole.ROLE_USER.getAuthorityName()))
+                List.of(new SignUpResponseDto.AuthorityResponse(UserRole.ROLE_USER.getAuthorityName()))
         );
 
-        signRequest = new UserRequest.Sign("testUser", "password123");
-        signResponse = new UserResponse.Sign("testJwtToken");
+        signRequest = new SignRequestDto();
+        ReflectionTestUtils.setField(signRequest, "username", "testUser");
+        ReflectionTestUtils.setField(signRequest, "password", "password123");
+
+        signResponse = new SignResponseDto("testJwtToken");
     }
 
     @Test
@@ -68,15 +80,16 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username").value(signUpResponse.username()))
-                .andExpect(jsonPath("$.nickname").value(signUpResponse.nickname()))
-                .andExpect(jsonPath("$.authorities[0].authorityName").value("ROLE_USER"));
+                .andExpect(jsonPath("$.username").value(signUpResponse.getUsername()))
+                .andExpect(jsonPath("$.nickname").value(signUpResponse.getNickname()))
+                .andExpect(jsonPath("$.authoritie[0].authorityName").value("ROLE_USER"));
+
     }
 
     @Test
     void 로그인_성공() throws Exception {
         // given
-        when(userService.sign(signRequest.username(), signRequest.password()))
+        when(userService.sign(signRequest.getUsername(), signRequest.getPassword()))
                 .thenReturn(signResponse);
 
         // when & then
@@ -85,7 +98,7 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(signRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").value(signResponse.token()));
+                .andExpect(jsonPath("$.token").value(signResponse.getToken()));
     }
 
 
