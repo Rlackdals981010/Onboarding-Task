@@ -73,6 +73,6 @@
 ![스웨거 로그인](https://github.com/user-attachments/assets/baff7bf2-1625-411f-b008-e3db93449cef)      
 - [x] PR 작성 및 제출
 - [x] 코드 리뷰를 통한 개선
-- [x] AWS EC2 환경에 배포
+- [x] AWS EC2 환경에 배포 [헬스체크링크](http://3.39.236.40:8080/health)
 ![스크린샷 2024-12-06 오후 6 37 09](https://github.com/user-attachments/assets/5149bf02-dd01-434c-b23c-caf52e986ce1)
 
