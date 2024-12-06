@@ -1,5 +1,6 @@
 package com.example.demo.domain.user.service;
 
+import com.example.demo.domain.user.dto.request.SignRequestDto;
 import com.example.demo.domain.user.dto.request.SignUpRequestDto;
 import com.example.demo.domain.user.dto.response.SignResponseDto;
 import com.example.demo.domain.user.dto.response.SignUpResponseDto;
@@ -42,6 +43,7 @@ class UserServiceTest {
     private UserService userService;
 
     private SignUpRequestDto signupDto;
+    private SignRequestDto signRequest;
 
     @BeforeEach
     void setUp() {
@@ -50,6 +52,10 @@ class UserServiceTest {
         ReflectionTestUtils.setField(signupDto, "username", "testUser");
         ReflectionTestUtils.setField(signupDto, "password", "password123");
         ReflectionTestUtils.setField(signupDto, "nickname", "testNickname");
+
+        signRequest = new SignRequestDto();
+        ReflectionTestUtils.setField(signRequest, "username", "testUser");
+        ReflectionTestUtils.setField(signRequest, "password", "password123");
     }
 
     @Test
@@ -68,11 +74,7 @@ class UserServiceTest {
         given(userRepository.save(Mockito.any(User.class))).willReturn(newUser);
 
         // when
-        SignUpResponseDto signUp = userService.signUp(
-                signupDto.getUsername(),
-                signupDto.getPassword(),
-                signupDto.getNickname()
-        );
+        SignUpResponseDto signUp = userService.signUp(signupDto);
 
         // then
         assertThat(signupDto.getUsername()).isEqualTo(signUp.getUsername());
@@ -88,7 +90,7 @@ class UserServiceTest {
 
         // when
         Exception exception = assertThrows(Exception.class, () -> {
-            userService.signUp(signupDto.getUsername(), signupDto.getPassword(), signupDto.getNickname());
+            userService.signUp(signupDto);
         });
 
         // then
@@ -117,7 +119,7 @@ class UserServiceTest {
         given(jwtUtil.createToken(createToken)).willReturn(token);
 
         // when
-        SignResponseDto response = userService.sign(signupDto.getUsername(), signupDto.getPassword());
+        SignResponseDto response = userService.sign(signRequest);
 
         // then
         assertThat(response.getToken()).isEqualTo(token);
@@ -131,7 +133,7 @@ class UserServiceTest {
 
         // when
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.sign(signupDto.getUsername(), signupDto.getPassword());
+            userService.sign(signRequest);
         });
 
         // then
@@ -155,7 +157,7 @@ class UserServiceTest {
 
         // when
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.sign(signupDto.getUsername(), signupDto.getPassword());
+            userService.sign(signRequest);
         });
 
         // then

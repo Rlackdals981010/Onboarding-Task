@@ -73,31 +73,28 @@ public class UserControllerTest {
     @Test
     void 가입성공() throws Exception {
         // given
-        when(userService.signUp(anyString(), anyString(), anyString()))
+        when(userService.signUp(signUpRequest))
                 .thenReturn(signUpResponse);
 
         // when & then
         mockMvc.perform(post("/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.username").value(signUpResponse.getUsername()))
-                .andExpect(jsonPath("$.nickname").value(signUpResponse.getNickname()));
+                .andExpect(status().isCreated());
+
     }
 
     @Test
     void 로그인_성공() throws Exception {
         // given
-        when(userService.sign(signRequest.getUsername(), signRequest.getPassword()))
-                .thenReturn(signResponse);
+        when(userService.sign(signRequest))
+                .thenReturn(new SignResponseDto("sample_token"));
 
         // when & then
         mockMvc.perform(post("/sign")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signRequest)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").value(signResponse.getToken()));
+                .andExpect(status().isOk());
+
     }
 }

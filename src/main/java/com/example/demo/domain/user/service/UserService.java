@@ -1,6 +1,8 @@
 package com.example.demo.domain.user.service;
 
 
+import com.example.demo.domain.user.dto.request.SignRequestDto;
+import com.example.demo.domain.user.dto.request.SignUpRequestDto;
 import com.example.demo.domain.user.dto.response.SignResponseDto;
 import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.entity.User;
@@ -25,7 +27,11 @@ public class UserService  {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public SignUpResponseDto signUp(String username, String password, String nickname) throws Exception {
+    public SignUpResponseDto signUp(SignUpRequestDto signUpDto) throws Exception {
+
+        String username = signUpDto.getUsername();
+        String nickname = signUpDto.getNickname();
+        String password = signUpDto.getPassword();
 
         if (userRepository.findByUsername(username).isPresent()) {
             throw new Exception("이미 가입된 유저입니다.");
@@ -48,7 +54,11 @@ public class UserService  {
     }
 
 
-    public SignResponseDto sign(String username, String password) {
+    public SignResponseDto sign(SignRequestDto signDto) {
+
+        String username = signDto.getUsername();
+        String password = signDto.getPassword();
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
