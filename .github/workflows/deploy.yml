@@ -1,7 +1,11 @@
-name: Java CI with Gradle
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-
-#main 브랜치가 수정될 될 때 해당 actions을 실행하겠다.
+name: Java CD with Gradle
 
 on:
   push:
@@ -9,13 +13,16 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
-  build-docker-image:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
+
+      ## jdk setting
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -23,31 +30,47 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
-      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-      # Spring boot 애플리케이션 빌드
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-        with:
-          arguments: clean bootJar
+      ## application.yml 생성 후 secret 값 복붙
+      - uses: actions/checkout@v4
+      - run: touch ./src/main/resources/application.yml
+      - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+      - run: cat ./src/main/resources/application.yml
 
-      - run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
+      # Gradle Build를 위한 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
+      # Gradle Build (test 제외)
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
 
-
-      # Docker 이미지 빌드
-      - name: docker image build
-        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/onboard:latest .
-
-      # Docker 로그인
-      - name: docker login
+      # DockerHub 로그인
+      - name: DockerHub Login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # Docker Hub 이미지 푸시
-      - name: docker Hub push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/onboard
+      # Docker 이미지 빌드
+      - name: Docker Image Build
+        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }} .
+
+      # DockerHub Push
+      - name: DockerHub Push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+
+      # EC2 인스턴스 접속 및 애플리케이션 실행
+      - name: Application Run
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+
+          script: |
+            sudo docker kill ${{ secrets.PROJECT_NAME }}
+            sudo docker rm -f ${{ secrets.PROJECT_NAME }}
+            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            
+            sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} -v mysql-volume:/var/lib/mysql --name ${{ secrets.PROJECT_NAME }} -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
