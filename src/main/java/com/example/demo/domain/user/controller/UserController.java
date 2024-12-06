@@ -6,7 +6,10 @@ import com.example.demo.domain.user.dto.request.SignUpRequestDto;
 import com.example.demo.domain.user.dto.response.SignResponseDto;
 import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,19 +22,20 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public SignUpResponseDto signup(@RequestBody SignUpRequestDto signUpDto) throws Exception {
-        return userService.signUp(signUpDto.getUsername(), signUpDto.getPassword(), signUpDto.getNickname());
+    public ResponseEntity<SignUpResponseDto> signup(@Valid @RequestBody SignUpRequestDto signUpDto) throws Exception {
+        SignUpResponseDto response = userService.signUp(signUpDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/sign")
-    public SignResponseDto sign(@RequestBody SignRequestDto signDto) throws Exception {
-        return userService.sign(signDto.getUsername(), signDto.getPassword());
+    public ResponseEntity<SignResponseDto> sign(@Valid @RequestBody SignRequestDto signDto) {
+        SignResponseDto response = userService.sign(signDto);
+        return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/health")
-    public String health(){
-        return "동작중";
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("동작중");
     }
-
 }
+
