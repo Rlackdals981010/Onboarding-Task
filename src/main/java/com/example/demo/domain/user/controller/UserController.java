@@ -7,6 +7,7 @@ import com.example.demo.domain.user.dto.response.SignResponseDto;
 import com.example.demo.domain.user.dto.response.SignUpResponseDto;
 import com.example.demo.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +29,9 @@ public class UserController {
     }
 
 
+    @GetMapping("/health")
+    public String health(){
+        return "동작중";
+    }
 
 }
