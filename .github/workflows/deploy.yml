@@ -5,7 +5,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
   pull_request:
     branches: [ "main" ]
 
@@ -37,7 +37,7 @@ jobs:
 
       # Docker 이미지 빌드
       - name: docker image build
-        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/onboard .
+        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/onboard:latest .
 
       # Docker 로그인
       - name: docker login
