@@ -28,6 +28,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+          host port: 3306
+          container port: 3306
+          mysql database: 'testdb'
+
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
