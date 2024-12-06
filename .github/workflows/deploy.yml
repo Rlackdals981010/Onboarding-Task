@@ -31,8 +31,10 @@ jobs:
         with:
           arguments: clean bootJar
 
-      - name: Set up application.properties
-        run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+      - run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+
 
 
       # Docker 이미지 빌드
