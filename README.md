@@ -81,5 +81,7 @@
 - [x] 코드 리뷰를 통한 개선
 - [x] AWS EC2 환경에 배포 [헬스체크링크](http://3.39.236.40:8080/health)
       
+![스크린샷 2024-12-08 오후 2 49 36](https://github.com/user-attachments/assets/817703c3-119f-48cc-a219-63bbb662c044)
+![스크린샷 2024-12-08 오후 2 49 43](https://github.com/user-attachments/assets/c799a327-03dd-4a8c-9f7b-83cda3761a77)
 ![스크린샷 2024-12-06 오후 6 37 09](https://github.com/user-attachments/assets/5149bf02-dd01-434c-b23c-caf52e986ce1)
 
